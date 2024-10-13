@@ -1,0 +1,24 @@
+-- Fetch the total number of orders and total value for each user
+SELECT 
+    U.username,
+    COUNT(O.order_id) AS total_orders,
+    COALESCE(SUM(O.total_amount), 0) AS total_order_value
+FROM 
+    Users U
+LEFT JOIN 
+    Orders O ON U.user_id = O.user_id
+GROUP BY 
+    U.user_id;
+
+-- To delete an order and update the user's total order value
+DELETE FROM OrderItems WHERE order_id = 1; -- Delete Order Items
+DELETE FROM Orders WHERE order_id = 1; -- Delete the Order
+
+-- Update the total amount for the user
+UPDATE Users U
+SET U.total_order_value = (
+    SELECT COALESCE(SUM(O.total_amount), 0)
+    FROM Orders O
+    WHERE O.user_id = U.user_id
+)
+WHERE U.user_id = (SELECT user_id FROM Orders WHERE order_id = 1);

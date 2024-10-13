@@ -1,0 +1,25 @@
+-- Insert sample product categories
+INSERT INTO ProductCategories (category_name) VALUES 
+('Electronics'), 
+('Clothing'), 
+('Home & Kitchen');
+
+-- Insert sample users
+INSERT INTO Users (username, email, password_hash) VALUES 
+('john_doe', 'john@example.com', 'hashed_password_1'), 
+('jane_smith', 'jane@example.com', 'hashed_password_2'),
+('alex_johnson', 'alex@example.com', 'hashed_password_3');
+
+-- Insert sample products
+INSERT INTO Products (product_name, price, stock_quantity, description, category_id) VALUES 
+('Gaming Laptop', 1299.99, 30, 'High-performance laptop for gaming.', 1),
+('Smartphone Pro', 899.99, 100, 'Premium smartphone with advanced features.', 1),
+('Graphic T-Shirt', 24.99, 200, 'Stylish graphic T-Shirt for casual wear.', 2),
+('Denim Jacket', 49.99, 150, 'Classic denim jacket for all seasons.', 2),
+('Air Fryer', 89.99, 50, 'Healthy cooking with less oil.', 3),
+('Coffee Maker', 129.99, 75, 'Brew your coffee perfectly every time.', 3);
+
+-- Insert sample orders
+INSERT INTO Orders (user_id, total_amount, status) VALUES 
+(1, 1399.98, 'completed'), 
+(2, 24.99, 'pending');

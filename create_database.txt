@@ -1,0 +1,56 @@
+-- Create the database
+CREATE DATABASE IF NOT EXISTS ecommerce;
+USE ecommerce;
+
+-- Create the ProductCategories table
+CREATE TABLE IF NOT EXISTS ProductCategories (
+    category_id INT AUTO_INCREMENT PRIMARY KEY,
+    category_name VARCHAR(255) NOT NULL,
+    INDEX (category_name) -- Index for faster lookups
+);
+
+-- Create the Users table
+CREATE TABLE IF NOT EXISTS Users (
+    user_id INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(50) NOT NULL UNIQUE,
+    email VARCHAR(100) NOT NULL UNIQUE,
+    password_hash VARCHAR(255) NOT NULL,
+    total_order_value DECIMAL(10, 2) DEFAULT 0, -- Total value of all orders
+    INDEX (username), -- Index for username
+    INDEX (email) -- Index for email
+);
+
+-- Create the Products table
+CREATE TABLE IF NOT EXISTS Products (
+    product_id INT AUTO_INCREMENT PRIMARY KEY,
+    product_name VARCHAR(255) NOT NULL,
+    price DECIMAL(10, 2) NOT NULL,
+    stock_quantity INT NOT NULL,
+    description TEXT,
+    category_id INT,
+    FOREIGN KEY (category_id) REFERENCES ProductCategories(category_id) ON DELETE SET NULL,
+    INDEX (product_name) -- Index for product_name for faster lookups
+);
+
+-- Create the Orders table
+CREATE TABLE IF NOT EXISTS Orders (
+    order_id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT,
+    total_amount DECIMAL(10, 2) NOT NULL,
+    status ENUM('pending', 'completed', 'cancelled') NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES Users(user_id) ON DELETE CASCADE,
+    INDEX (user_id) -- Index for user_id for faster joins
+);
+
+-- Create the OrderItems table
+CREATE TABLE IF NOT EXISTS OrderItems (
+    order_item_id INT AUTO_INCREMENT PRIMARY KEY,
+    order_id INT,
+    product_id INT,
+    quantity INT NOT NULL,
+    price_at_time DECIMAL(10, 2) NOT NULL,
+    FOREIGN KEY (order_id) REFERENCES Orders(order_id) ON DELETE CASCADE,
+    FOREIGN KEY (product_id) REFERENCES Products(product_id) ON DELETE CASCADE,
+    INDEX (order_id), -- Index for order_id for faster joins
+    INDEX (product_id) -- Index for product_id for faster joins
+);
